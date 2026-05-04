@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIG-Treinos — Luperce</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:      #0d0d0f;
+  --bg2:     #18181c;
+  --bg3:     #222228;
+  --bg4:     #2a2a32;
+  --border:  rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --text:    #f0f0f2;
+  --text2:   #9898a8;
+  --text3:   #5a5a68;
+  --primary: #f97316;
+  --pri-dim: rgba(249,115,22,0.12);
+  --pri-brd: rgba(249,115,22,0.3);
+  --green:   #22c55e;
+  --grn-dim: rgba(34,197,94,0.12);
+  --grn-brd: rgba(34,197,94,0.3);
+  --blue:    #60a5fa;
+  --blu-dim: rgba(96,165,250,0.12);
+  --blu-brd: rgba(96,165,250,0.3);
+  --yellow:  #facc15;
+  --yel-dim: rgba(250,204,21,0.12);
+  --yel-brd: rgba(250,204,21,0.3);
+  --red:     #f87171;
+  --red-dim: rgba(248,113,113,0.12);
+  --red-brd: rgba(248,113,113,0.3);
+  --purple:  #c084fc;
+  --pur-dim: rgba(192,132,252,0.12);
+  --pur-brd: rgba(192,132,252,0.3);
+  --radius:  14px;
+  --radius-s: 9px;
+}
+[data-theme="light"] {
+  --bg:      #f5f5f7;
+  --bg2:     #ffffff;
+  --bg3:     #ededf2;
+  --bg4:     #e4e4ec;
+  --border:  rgba(0,0,0,0.07);
+  --border2: rgba(0,0,0,0.13);
+  --text:    #1a1a1f;
+  --text2:   #5a5a68;
+  --text3:   #9898a8;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-tap-highlight-color:transparent}
+.app{max-width:430px;margin:0 auto;padding-bottom:24px}
+
+/* ── Header ── */
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;position:sticky;top:0;background:var(--bg);z-index:20;border-bottom:1px solid var(--border)}
+.hdr-logo{font-size:17px;font-weight:700;letter-spacing:-0.02em}
+.hdr-logo em{color:var(--primary);font-style:normal}
+.hdr-right{display:flex;align-items:center;gap:8px}
+.phase-chip{font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;letter-spacing:0.03em}
+.p1{background:var(--pri-dim);color:var(--primary);border:1px solid var(--pri-brd)}
+.p2{background:var(--pur-dim);color:var(--purple);border:1px solid var(--pur-brd)}
+.icon-btn{background:none;border:none;cursor:pointer;color:var(--text2);font-size:17px;padding:5px;border-radius:8px;line-height:1;transition:background 0.15s}
+.icon-btn:hover{background:var(--bg3)}
+
+/* ── Nav ── */
+.nav{display:flex;padding:0 12px;border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nav-btn{background:none;border:none;color:var(--text3);font-family:inherit;font-size:13px;font-weight:500;padding:10px 10px 9px;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:color 0.15s,border-color 0.15s}
+.nav-btn.on{color:var(--primary);border-bottom-color:var(--primary)}
+
+/* ── Cards ── */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin:12px 14px}
+.card-label{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);margin-bottom:10px}
+
+/* ── Today header ── */
+.today-top{padding:18px 16px 4px}
+.today-day{font-size:21px;font-weight:700;letter-spacing:-0.02em}
+.today-meta{display:flex;align-items:center;gap:10px;margin-top:3px;font-size:12px;color:var(--text2)}
+.dot-sep{width:3px;height:3px;border-radius:50%;background:var(--text3)}
+.countdown-row{display:flex;gap:8px;flex-wrap:wrap;margin:10px 14px 0}
+.count-chip{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:5px 10px;font-size:11px;color:var(--text2)}
+.count-chip strong{color:var(--text);font-size:13px;font-family:'JetBrains Mono',monospace}
+
+/* ── Training badge ── */
+.t-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px}
+.b-leve{background:var(--grn-dim);color:var(--green);border:1px solid var(--grn-brd)}
+.b-moderada{background:var(--blu-dim);color:var(--blue);border:1px solid var(--blu-brd)}
+.b-intensa{background:var(--red-dim);color:var(--red);border:1px solid var(--red-brd)}
+.b-longa{background:var(--yel-dim);color:var(--yellow);border:1px solid var(--yel-brd)}
+.b-academia{background:var(--pur-dim);color:var(--purple);border:1px solid var(--pur-brd)}
+.b-tabata{background:var(--red-dim);color:#fca5a5;border:1px solid var(--red-brd)}
+.b-descanso{background:var(--bg3);color:var(--text3);border:1px solid var(--border)}
+
+/* ── Check-in form ── */
+.ci-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ci-item{}
+.ci-label{font-size:12px;color:var(--text2);margin-bottom:6px}
+.ci-icon{font-size:15px;margin-right:4px}
+.stars{display:flex;gap:3px}
+.star{width:36px;height:32px;background:var(--bg3);border:1px solid var(--border);border-radius:7px;color:var(--text2);font-size:13px;font-weight:600;cursor:pointer;transition:all 0.12s;font-family:inherit}
+.star.on{background:var(--primary);color:#fff;border-color:var(--primary)}
+
+/* ── Buttons ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:10px 18px;border-radius:var(--radius-s);font-family:inherit;font-size:14px;font-weight:500;cursor:pointer;border:none;transition:all 0.15s;white-space:nowrap}
+.btn-pri{background:var(--primary);color:#fff}
+.btn-pri:hover{opacity:0.88}
+.btn-ghost{background:var(--bg3);color:var(--text);border:1px solid var(--border)}
+.btn-ghost:hover{background:var(--bg4)}
+.btn-green{background:var(--green);color:#fff}
+.btn-green:hover{opacity:0.88}
+.btn-w{width:100%}
+.btn:disabled{opacity:0.4;cursor:not-allowed}
+.btn-row{display:flex;gap:8px;margin-top:12px}
+
+/* ── Training output ── */
+.t-meta{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px}
+.t-meta-item{background:var(--bg3);border-radius:8px;padding:8px 10px}
+.t-meta-key{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:2px}
+.t-meta-val{font-size:13px;font-weight:600;font-family:'JetBrains Mono',monospace;color:var(--text)}
+.t-desc{font-size:13px;line-height:1.75;color:var(--text2);white-space:pre-wrap}
+.t-obs{background:var(--bg3);border-left:3px solid var(--primary);border-radius:0 8px 8px 0;padding:10px 12px;font-size:13px;color:var(--text2);margin-top:12px}
+.t-motiv{font-size:12px;color:var(--text3);font-style:italic;margin-top:10px;text-align:center}
+
+/* ── Spinner ── */
+.spinner{width:18px;height:18px;border:2px solid rgba(255,255,255,0.25);border-top-color:#fff;border-radius:50%;animation:spin 0.6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── Inputs ── */
+.field{margin-bottom:11px}
+.field label{display:block;font-size:12px;color:var(--text2);margin-bottom:4px}
+.field input,.field textarea,.field select{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-s);padding:8px 11px;color:var(--text);font-family:inherit;font-size:13px;transition:border-color 0.15s}
+.field input:focus,.field textarea:focus{outline:none;border-color:var(--primary)}
+.field textarea{resize:vertical;min-height:70px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+
+/* ── Week view ── */
+.week-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin:0 14px}
+.wday{background:var(--bg2);border:1px solid var(--border);border-radius:9px;padding:8px 3px;text-align:center;cursor:pointer;transition:all 0.15s}
+.wday.is-today{border-color:var(--primary);background:var(--pri-dim)}
+.wday.is-done{border-color:var(--green)}
+.wday.is-missed{opacity:0.5}
+.wday-name{font-size:8px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text3)}
+.wday-icon{font-size:18px;margin:5px 0 3px}
+.wday-num{font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace}
+.wday-badge{font-size:8px;padding:1px 4px;border-radius:4px;margin-top:3px;font-weight:600}
+
+/* ── Progress ── */
+.metrics-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 14px}
+.metric{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-s);padding:14px}
+.metric-val{font-size:28px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--primary);line-height:1.1}
+.metric-lbl{font-size:11px;color:var(--text2);margin-top:3px}
+.bar-wrap{background:var(--bg3);border-radius:4px;height:5px;overflow:hidden;margin-top:8px}
+.bar-fill{height:100%;border-radius:4px;background:var(--primary);transition:width 0.8s cubic-bezier(.2,.8,.4,1)}
+.bar-fill.green{background:var(--green)}
+
+/* ── Longo chart ── */
+.chart-wrap{display:flex;align-items:flex-end;gap:3px;height:70px;padding:0 2px}
+.c-bar{flex:1;border-radius:4px 4px 0 0;min-height:4px;position:relative;cursor:pointer;transition:opacity 0.15s}
+.c-bar:hover{opacity:0.75}
+.c-bar.done{background:var(--green)}
+.c-bar.curr{background:var(--primary);outline:2px solid var(--primary);outline-offset:2px}
+.c-bar.rec{background:var(--blue);opacity:0.6}
+.c-bar.fut{background:var(--bg3)}
+.chart-labels{display:flex;gap:3px;padding:3px 2px 0;font-size:9px;color:var(--text3);font-family:'JetBrains Mono',monospace}
+.chart-labels span{flex:1;text-align:center;overflow:hidden}
+
+/* ── History ── */
+.hist-item{display:flex;gap:12px;padding:11px 0;border-bottom:1px solid var(--border)}
+.hist-item:last-child{border-bottom:none}
+.hist-dot{width:8px;height:8px;border-radius:50%;background:var(--green);margin-top:5px;flex-shrink:0}
+.hist-dot.skip{background:var(--text3)}
+.hist-date{font-size:11px;color:var(--text3);margin-bottom:2px}
+.hist-name{font-size:13px;font-weight:500}
+.hist-metrics{display:flex;gap:10px;margin-top:4px;font-size:11px;color:var(--text2);font-family:'JetBrains Mono',monospace;flex-wrap:wrap}
+.hist-metric span{color:var(--text3)}
+
+/* ── Alert ── */
+.alert{padding:9px 12px;border-radius:var(--radius-s);font-size:12px;margin-bottom:11px}
+.al-warn{background:var(--yel-dim);color:var(--yellow);border:1px solid var(--yel-brd)}
+.al-info{background:var(--blu-dim);color:var(--blue);border:1px solid var(--blu-brd)}
+.al-green{background:var(--grn-dim);color:var(--green);border:1px solid var(--grn-brd)}
+.al-red{background:var(--red-dim);color:var(--red);border:1px solid var(--red-brd)}
+
+/* ── Setup overlay ── */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:100;padding:20px}
+.setup-card{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius);padding:24px;width:100%;max-width:380px}
+.setup-title{font-size:17px;font-weight:700;margin-bottom:6px}
+.setup-sub{font-size:13px;color:var(--text2);margin-bottom:18px;line-height:1.5}
+
+/* ── Views ── */
+.view{display:none}
+.view.on{display:block}
+
+/* ── Section title ── */
+.section-hd{font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);padding:14px 16px 6px}
+
+/* ── Divider ── */
+.div{height:1px;background:var(--border);margin:12px 0}
+
+/* ── Done banner ── */
+.done-banner{background:var(--grn-dim);border:1px solid var(--grn-brd);border-radius:var(--radius-s);padding:10px 14px;display:flex;align-items:center;gap:10px;font-size:13px;color:var(--green)}
+
+/* ── Scroll helper ── */
+.scroll-x{overflow-x:auto;scrollbar-width:none}
+.scroll-x::-webkit-scrollbar{display:none}
+
+/* ── FC zones legend ── */
+.zones-row{display:flex;gap:4px;flex-wrap:wrap;margin-top:8px}
+.z-chip{font-size:10px;padding:2px 7px;border-radius:20px;font-weight:600}
+.z1{background:rgba(34,197,94,0.15);color:#4ade80}
+.z2{background:rgba(163,230,53,0.15);color:#a3e635}
+.z3{background:rgba(250,204,21,0.15);color:#facc15}
+.z4{background:rgba(249,115,22,0.15);color:#fb923c}
+.z5{background:rgba(239,68,68,0.15);color:#f87171}
+</style>
+</head>
+<body>
+
+<!-- Setup Overlay -->
+<div class="overlay" id="setup" style="display:none">
+  <div class="setup-card">
+    <div class="setup-title">🏃 SIG-Treinos</div>
+    <div class="setup-sub">Para treinos personalizados com IA, informe sua chave da API Anthropic. Você pode usar o sistema sem ela também.</div>
+    <div class="field">
+      <label>Chave API Anthropic (opcional)</label>
+      <input type="password" id="key-input" placeholder="sk-ant-...">
+    </div>
+    <button class="btn btn-pri btn-w" onclick="saveKey()">Salvar e Começar</button>
+    <button class="btn btn-ghost btn-w" style="margin-top:8px" onclick="skipSetup()">Usar sem IA</button>
+  </div>
+</div>
+
+<!-- App -->
+<div class="app" id="app">
+  <!-- Header -->
+  <header class="hdr">
+    <div class="hdr-logo">SIG<em>·</em>Treinos</div>
+    <div class="hdr-right">
+      <span class="phase-chip p1" id="hdr-phase">Fase 1 · 21km</span>
+      <button class="icon-btn" onclick="toggleTheme()" title="Alternar tema">◑</button>
+    </div>
+  </header>
+
+  <!-- Nav -->
+  <nav class="nav">
+    <button class="nav-btn on" id="tab-hoje" onclick="setView('hoje')">Hoje</button>
+    <button class="nav-btn" id="tab-semana" onclick="setView('semana')">Semana</button>
+    <button class="nav-btn" id="tab-progresso" onclick="setView('progresso')">Progresso</button>
+    <button class="nav-btn" id="tab-historico" onclick="setView('historico')">Histórico</button>
+    <button class="nav-btn" id="tab-config" onclick="setView('config')">⚙</button>
+  </nav>
+
+  <!-- Views -->
+  <div class="view on" id="view-hoje"></div>
+  <div class="view" id="view-semana"></div>
+  <div class="view" id="view-progresso"></div>
+  <div class="view" id="view-historico"></div>
+  <div class="view" id="view-config"></div>
+</div>
+
+<script>
+// ════════════════════════════════════════
+// CONSTANTS
+// ════════════════════════════════════════
+const PLAN_START  = new Date('2026-05-04'); // Semana 1 - Segunda
+const GOAL_21K    = new Date('2026-12-27');
+const GOAL_42K    = new Date('2027-12-27');
+
+const DAY_LONG  = ['Domingo','Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sábado'];
+const DAY_SHORT = ['DOM','SEG','TER','QUA','QUI','SEX','SÁB'];
+
+const TYPES = {
+  corrida_leve:     {label:'Corrida Leve',    icon:'🏃',  cls:'b-leve',     z:'Z2'},
+  corrida_moderada: {label:'Corrida Moderada',icon:'🏃',  cls:'b-moderada', z:'Z3'},
+  corrida_intensa:  {label:'Corrida Intensa', icon:'⚡',  cls:'b-intensa',  z:'Z4-Z5'},
+  corrida_longa:    {label:'Corrida Longa',   icon:'🏅',  cls:'b-longa',    z:'Z2'},
+  academia:         {label:'Academia',        icon:'💪',  cls:'b-academia', z:'—'},
+  tabata_academia:  {label:'Tabata / Academia',icon:'⏱', cls:'b-tabata',   z:'Z4-Z5'},
+  descanso:         {label:'Descanso Total',  icon:'😴',  cls:'b-descanso', z:'—'},
+};
+
+// ════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════
+const S = {
+  view: 'hoje',
+  logs: JSON.parse(localStorage.getItem('sigt_logs') || '{}'),
+  theme: localStorage.getItem('sigt_theme') || 'dark',
+  apiKey: localStorage.getItem('sigt_key') || '',
+  noAI: localStorage.getItem('sigt_noai') === '1',
+};
+
+// ════════════════════════════════════════
+// UTILS
+// ════════════════════════════════════════
+const today = () => new Date();
+const dkey  = (d) => d.toISOString().slice(0,10);
+const daysUntil = (d) => Math.max(0, Math.ceil((new Date(d) - today()) / 86400000));
+
+function getWeekNum() {
+  const diff = today() - PLAN_START;
+  if (diff < 0) return 0;
+  return Math.floor(diff / (7*86400000)) + 1;
+}
+
+function isRecovery(w) { return w > 0 && w % 4 === 0; }
+
+function getLongKm(w) {
+  if (w <= 0) return 8;
+  const cycle = Math.ceil(w / 4);
+  const pos   = w % 4 || 4;
+  if (pos === 4) return Math.min(Math.max(6 + (cycle-1)*2, 8), 18);
+  return Math.min(8 + (cycle-1)*2 + (pos-1), 21);
+}
+
+function getType(dow, w) {
+  const rec = isRecovery(w);
+  switch(dow) {
+    case 1: return 'corrida_leve';
+    case 2: return 'academia';
+    case 3: return rec ? 'corrida_moderada' : 'corrida_intensa';
+    case 4: return 'tabata_academia';
+    case 5: return w <= 8 ? 'corrida_leve' : 'corrida_moderada';
+    case 6: return 'corrida_longa';
+    default: return 'descanso';
+  }
+}
+
+function adjustType(type, ci) {
+  if (!ci) return type;
+  const stress = (ci.fadiga + ci.dor) / 2;
+  if (stress >= 4 || ci.fadiga >= 5) {
+    if (type === 'corrida_intensa')  return 'corrida_leve';
+    if (type === 'corrida_moderada') return 'corrida_leve';
+    if (type === 'corrida_longa')    return 'corrida_moderada';
+    if (type === 'tabata_academia')  return 'academia';
+  }
+  return type;
+}
+
+function saveLogs() { localStorage.setItem('sigt_logs', JSON.stringify(S.logs)); }
+function getLog(k)  { return S.logs[k] || null; }
+function putLog(k,d){ S.logs[k] = {...(S.logs[k]||{}), ...d}; saveLogs(); }
+
+function fmtPace(secKm) {
+  if (!secKm) return '—';
+  const m = Math.floor(secKm/60), s = Math.round(secKm%60);
+  return `${m}:${String(s).padStart(2,'0')}/km`;
+}
+
+function streak() {
+  let count = 0, d = new Date();
+  while (true) {
+    d.setDate(d.getDate()-1);
+    const k = dkey(d);
+    const l = S.logs[k];
+    if (!l || !l.done) break;
+    count++;
+  }
+  return count;
+}
+
+// ════════════════════════════════════════
+// FALLBACK TRAINING TEMPLATES
+// ════════════════════════════════════════
+function getFallback(type, w, ci, longKm) {
+  const stress = ci ? (ci.fadiga + ci.dor)/2 : 2;
+  const stressed = stress >= 3.5;
+  const rec = isRecovery(w);
+
+  const academiaType = w % 2 === 1 ? 'Inferior' : 'Superior';
+
+  const T = {
+    corrida_leve: {
+      titulo:'Corrida Leve',
+      intensidade:'Leve',zonas:'Z2 (aeróbico fácil)',fc:'103–136 bpm',
+      ritmo:'6:20–7:10/km',
+      duracao: w<=4?'40–50 min': w<=12?'45–55 min':'50–60 min',
+      distancia: w<=4?'6–8 km':'8–10 km',
+      descricao:[
+        '• Aquecimento: 5 min caminhando ou trote muito leve',
+        '• Corrida contínua em Z2 — deve conseguir conversar',
+        '• Ritmo-alvo: 6:20–7:10/km',
+        '• Últimos 3 min: desacelere gradualmente',
+        '• Alongamento: 10 min (panturrilha, quadríceps, isquiotibial)',
+      ].join('\n'),
+      obs: stressed?'⚠️ Fadiga detectada — priorize Z2 baixo. Se forçar, caminhe sem culpa.':'Mantenha ritmo confortável. Treinos leves são onde a base aeróbica é construída.',
+      motivacao:'Devagar e sempre. Cada km Z2 te aproxima do pace dos seus sonhos.',
+    },
+    corrida_moderada: {
+      titulo:'Corrida Moderada',
+      intensidade:'Moderada',zonas:'Z3',fc:'120–136 bpm',
+      ritmo:'5:50–6:20/km',duracao:'40–50 min',distancia:'8–10 km',
+      descricao:[
+        '• Aquecimento: 5–8 min trote leve (Z2)',
+        '• Corrida contínua em Z3 — esforço controlado e constante',
+        '• Ritmo-alvo: 5:50–6:20/km',
+        '• Respire ritmado: 3 passos / 3 passos',
+        '• Desaceleração gradual nos últimos 5 min',
+        '• Alongamento: 10 min',
+      ].join('\n'),
+      obs:'Corrida de desenvolvimento. Mantenha ritmo estável — evite acelerar no meio.',
+      motivacao:'Consistência no Z3 = melhora de pace que você vai notar nas próximas semanas.',
+    },
+    corrida_intensa: {
+      titulo:'Corrida Intervalada',
+      intensidade:'Alta',zonas:'Z4–Z5',fc:'137–160+ bpm',
+      ritmo:'5:20–5:50/km (intervalos)',
+      duracao:'45–55 min',distancia:'8–10 km total',
+      descricao: rec?[
+        '• Aquecimento: 12 min Z2',
+        '• 4x 3 min em Z4 (ritmo 5:30–5:50/km)',
+        '• 2 min trote leve entre intervalos',
+        '• Desaceleração: 12 min Z2',
+        '• Alongamento: 10 min',
+      ].join('\n'):[
+        '• Aquecimento: 10 min trote leve (Z2)',
+        `• ${w<=4?'5x 3 min':w<=12?'6x 3 min':'5x 4 min'} em Z4–Z5 (5:20–5:50/km)`,
+        '• 2 min trote leve entre intervalos',
+        '• Desaceleração: 10 min Z2',
+        '• Alongamento: 10 min',
+      ].join('\n'),
+      obs:'Treino intenso da semana. FC deve cair em cada recuperação — se não cair, reduza o ritmo.',
+      motivacao:'Intervalos assustam no começo. Depois de 4 semanas, você vai pedir mais.',
+    },
+    corrida_longa: {
+      titulo:'Corrida Longa',
+      intensidade:'Leve',zonas:'Z2 (resistência)',fc:'103–130 bpm',
+      ritmo:'6:30–7:20/km',
+      duracao:`~${Math.round(longKm*7)} min`,
+      distancia:`${longKm} km`,
+      descricao:[
+        `• Meta: ${longKm} km em ritmo leve e constante`,
+        '• Ritmo-alvo: 6:30–7:20/km — sem pressa',
+        '• Hidrate a cada 20–25 min',
+        '• Se FC > 136 bpm → reduza o ritmo',
+        longKm>=12?'• Leve gel energético ou tâmara após 60 min':'• Tome água antes de sair',
+        '• Alongamento pós-treino: 15 min',
+      ].join('\n'),
+      obs:`Longo de ${longKm} km. Pace não importa — FC baixa é o objetivo. Você está construindo a base do seu 21km.`,
+      motivacao:`Cada km longo te leva um passo mais perto de ${longKm >= 18 ? 'cruzar a linha!' : '21 km no fim do ano.'}`,
+    },
+    academia: {
+      titulo:`Academia — ${academiaType} + Core`,
+      intensidade:'Moderada',zonas:'—',fc:'80–130 bpm',ritmo:'—',
+      duracao:'60–75 min',distancia:'—',
+      descricao: academiaType==='Inferior'?[
+        '• Agachamento livre: 4x 12 reps',
+        '• Leg press: 3x 15 reps',
+        '• Cadeira extensora: 3x 12 reps',
+        '• Mesa flexora: 3x 12 reps',
+        '• Avanço alternado: 3x 10 reps/lado',
+        '• Panturrilha em pé: 4x 15 reps',
+        '• Prancha: 3x 45 seg',
+        '• Abdominal: 3x 20 reps',
+      ].join('\n'):[
+        '• Supino reto: 4x 10 reps',
+        '• Puxada frontal: 4x 10 reps',
+        '• Desenvolvimento com halteres: 3x 12 reps',
+        '• Remada curvada: 3x 10 reps',
+        '• Crucifixo: 3x 12 reps',
+        '• Rosca direta: 3x 12 reps',
+        '• Tríceps corda: 3x 12 reps',
+        '• Prancha: 3x 45 seg',
+      ].join('\n'),
+      obs:'Cargas moderadas — a corrida precisa das pernas. Execute com técnica, sem forçar ao máximo.',
+      motivacao:'Academia é o segredo que a maioria dos corredores ignora. Você não ignora.',
+    },
+    tabata_academia: {
+      titulo:'Tabata',
+      intensidade:'Alta',zonas:'Z4–Z5',fc:'150+ bpm',ritmo:'—',
+      duracao:'20–25 min',distancia:'—',
+      descricao:[
+        '• Aquecimento: 5 min (polichinelo, rotações, agachamento leve)',
+        '• 8 rounds × Tabata (20 seg MÁXIMO / 10 seg pausa):',
+        '  – Burpee / Agachamento com salto / Mountain climber / Prancha toque ombro',
+        '• Descanso 60 seg entre rodadas',
+        '• Repita 2–3 rodadas',
+        '• Desaquecimento: 5 min leve',
+      ].join('\n'),
+      obs:'⚡ Tabata = intenso da semana. Sem corrida intensa nos outros dias se fizer isso hoje.',
+      motivacao:'20 minutos que valem por 60. A hora da verdade é agora.',
+    },
+    descanso: {
+      titulo:'Descanso Total',
+      intensidade:'—',zonas:'—',fc:'—',ritmo:'—',
+      duracao:'O dia todo',distancia:'—',
+      descricao:[
+        '• Sem treino — domingo é sagrado! ☀️',
+        '• Hidrate-se bem durante o dia',
+        '• Durma cedo (preparação para semana)',
+        '• Alongamento leve opcional (10–15 min)',
+        '• Visualize os treinos da semana que vem',
+      ].join('\n'),
+      obs:'Recuperação não é fraqueza — é parte do plano. Seu corpo evolui no descanso.',
+      motivacao:'O campeão descansa com a mesma seriedade com que treina.',
+    },
+  };
+  return T[type] || T.descanso;
+}
+
+// ════════════════════════════════════════
+// AI GENERATION
+// ════════════════════════════════════════
+async function callAI(type, w, ci, longKm) {
+  if (!S.apiKey || S.noAI) return null;
+
+  const now = today();
+  const dow = now.getDay();
+  const rec = isRecovery(w);
+  const stress = ci ? (ci.fadiga + ci.dor)/2 : 2;
+  const wellness = ci ? (ci.sono + ci.motivacao)/2 : 3;
+
+  const prompt = `Você é o treinador personalizado de Marcos Luperce Rocha. Gere o treino de hoje.
+
+PERFIL:
+Corre ~8 km a 6:00/km, FC média 149 bpm. Treina às 5:30h. Academia 2x/semana à noite. Objetivo 1: 21 km em 27/12/2026. Objetivo 2: 42 km em 27/12/2027.
+
+HOJE: ${DAY_LONG[dow]}, ${now.toLocaleDateString('pt-BR')}
+Semana ${w} do plano${rec?' — ⚠️ SEMANA DE RECUPERAÇÃO':''}.
+Treino planejado: ${TYPES[type]?.label}. Corrida longa desta semana: ${longKm} km.
+
+CHECK-IN:
+Fadiga: ${ci?.fadiga||3}/5 | Dor: ${ci?.dor||2}/5 | Sono: ${ci?.sono||3}/5 | Motivação: ${ci?.motivacao||3}/5
+Nível de estresse: ${stress.toFixed(1)} | Bem-estar: ${wellness.toFixed(1)}
+${stress >= 4 ? '⚠️ ESTRESSE ALTO — reduzir intensidade é obrigatório.' : ''}
+${ci?.sono <= 2 ? '⚠️ SONO RUIM — alerte e reduza.' : ''}
+
+Regras: máx 2 intensos/sem, priorizar Z2, fadiga≥4 → reduzir para leve, domingos sempre descanso.
+
+Retorne EXATAMENTE neste formato (sem markdown, sem asteriscos extras):
+
+TREINO: [nome curto]
+INTENSIDADE: [Leve/Moderada/Alta]
+ZONAS: [ex: Z2]
+DURAÇÃO: [ex: 45 min]
+DISTÂNCIA: [ex: 8 km ou — se academia/tabata]
+RITMO: [ex: 6:20-7:00/km ou —]
+FC_ALVO: [ex: 103-136 bpm]
+DESCRIÇÃO:
+[bullets com •, máx 100 palavras, concisos e práticos]
+OBSERVAÇÃO:
+[1-2 frases personalizadas, mencione o check-in se relevante]
+MOTIVAÇÃO:
+[1 frase curta, real, não clichê]`;
+
+  const resp = await fetch('https://api.anthropic.com/v1/messages', {
+    method:'POST',
+    headers:{'Content-Type':'application/json','x-api-key':S.apiKey,'anthropic-version':'2023-06-01'},
+    body: JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,messages:[{role:'user',content:prompt}]})
+  });
+  if (!resp.ok) throw new Error('API ' + resp.status);
+  const d = await resp.json();
+  if (d.error) throw new Error(d.error.message);
+  return d.content[0].text;
+}
+
+function parseAI(text) {
+  const g = (k) => {
+    const m = text.match(new RegExp(k+':\\s*([\\s\\S]+?)(?=\\n[A-ZÇÃÉ_]{4,}:|$)'));
+    return m ? m[1].trim() : '';
+  };
+  return {
+    titulo:      g('TREINO'),
+    intensidade: g('INTENSIDADE'),
+    zonas:       g('ZONAS'),
+    duracao:     g('DURAÇÃO'),
+    distancia:   g('DISTÂNCIA'),
+    ritmo:       g('RITMO'),
+    fc:          g('FC_ALVO'),
+    descricao:   g('DESCRIÇÃO'),
+    obs:         g('OBSERVAÇÃO'),
+    motivacao:   g('MOTIVAÇÃO'),
+  };
+}
+
+// ════════════════════════════════════════
+// RENDER — HOJE
+// ════════════════════════════════════════
+function renderHoje() {
+  const el   = document.getElementById('view-hoje');
+  const now  = today();
+  const dow  = now.getDay();
+  const w    = getWeekNum();
+  const key  = dkey(now);
+  const log  = getLog(key);
+  const longKm = getLongKm(w);
+  const rec  = isRecovery(w);
+
+  const plannedType  = getType(dow, w);
+  const adjustedType = log?.checkin ? adjustType(plannedType, log.checkin) : plannedType;
+  const T = TYPES[adjustedType] || TYPES.descanso;
+
+  const badgeHTML = (type) => {
+    const t = TYPES[type];
+    return `<span class="t-badge ${t.cls}">${t.icon} ${t.label}</span>`;
+  };
+
+  let html = `
+    <div class="today-top">
+      <div class="today-day">${DAY_LONG[dow]}</div>
+      <div class="today-meta">
+        <span>${now.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'})}</span>
+        <span class="dot-sep"></span>
+        <span>Semana ${w} · ${rec?'<span style="color:var(--blue)">Recuperação</span>':'Construção'}</span>
+      </div>
+    </div>
+    <div class="countdown-row">
+      <div class="count-chip">21km <strong>${daysUntil(GOAL_21K)}</strong> dias</div>
+      <div class="count-chip">42km <strong>${daysUntil(GOAL_42K)}</strong> dias</div>
+      ${dow===6?`<div class="count-chip">Longo <strong>${longKm}km</strong></div>`:''}
+    </div>
+  `;
+
+  // — Alerts —
+  if (rec) html += `<div class="card"><div class="alert al-info">🔵 Semana de recuperação — reduza carga, priorize Z2 nos longos e intensos.</div></div>`;
+
+  // — Training type card —
+  html += `<div class="card">
+    <div class="card-label">Treino de hoje</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+      ${badgeHTML(adjustedType)}
+      ${plannedType !== adjustedType ? `<span style="font-size:11px;color:var(--text3)">ajustado de: ${TYPES[plannedType].label}</span>` : ''}
+    </div>`;
+
+  // — Done state —
+  if (log?.done) {
+    html += `<div class="div"></div>
+    <div class="done-banner">✅ Treino concluído hoje!
+      ${log.metrics?.km ? ` — <strong>${log.metrics.km} km</strong>` : ''}
+      ${log.metrics?.pace ? ` · <strong>${log.metrics.pace}</strong>` : ''}
+      ${log.metrics?.fc ? ` · <strong>${log.metrics.fc} bpm</strong>` : ''}
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-ghost" onclick="reopenLog('${key}')">✏️ Editar registro</button>
+    </div>`;
+
+  } else if (log?.training) {
+    // Training generated — show it
+    const tr = log.training;
+    html += `<div class="div"></div>
+    <div class="t-meta">
+      <div class="t-meta-item"><div class="t-meta-key">Duração</div><div class="t-meta-val">${tr.duracao||'—'}</div></div>
+      <div class="t-meta-item"><div class="t-meta-key">Distância</div><div class="t-meta-val">${tr.distancia||'—'}</div></div>
+      <div class="t-meta-item"><div class="t-meta-key">Ritmo</div><div class="t-meta-val" style="font-size:11px">${tr.ritmo||'—'}</div></div>
+    </div>
+    <div class="card-label">Zonas &amp; Intensidade</div>
+    <div style="font-size:13px;color:var(--text2)">${tr.zonas||'—'} · FC ${tr.fc||'—'}</div>
+    <div class="div"></div>
+    <div class="card-label">Descrição</div>
+    <div class="t-desc">${tr.descricao||''}</div>
+    ${tr.obs ? `<div class="t-obs">${tr.obs}</div>` : ''}
+    ${tr.motivacao ? `<div class="t-motiv">"${tr.motivacao}"</div>` : ''}
+    <div class="btn-row">
+      <button class="btn btn-green btn-w" onclick="showRegister('${key}')">✅ Registrar Conclusão</button>
+      <button class="btn btn-ghost" onclick="regenTraining('${key}')">↻</button>
+    </div>`;
+
+  } else if (log?.checkin) {
+    // Has checkin, no training yet
+    html += `<div class="div"></div>
+    <div class="alert al-info">Check-in feito. Clique em "Gerar Treino" para ver o plano personalizado.</div>
+    <button class="btn btn-pri btn-w" id="gen-btn" onclick="doGenerate('${key}','${adjustedType}',${w},${longKm})">
+      ${S.apiKey && !S.noAI ? '🤖 Gerar Treino com IA' : '📋 Ver Treino do Dia'}
+    </button>`;
+
+  } else {
+    // No checkin yet
+    if (dow === 0) {
+      // Sunday — rest day
+      html += `<div class="div"></div>
+      <div style="text-align:center;padding:12px 0">
+        <div style="font-size:40px;margin-bottom:8px">😴</div>
+        <div style="font-size:15px;font-weight:600">Descanso Total</div>
+        <div style="font-size:13px;color:var(--text2);margin-top:4px">Domingo é sagrado. Recupere-se!</div>
+      </div>
+      <button class="btn btn-green btn-w" onclick="markRestDone('${key}')">✅ Dia de descanso registrado</button>`;
+    } else {
+      html += `<div class="div"></div>
+      <div class="card-label">Check-in do dia</div>
+      <div class="ci-grid" id="ci-form">
+        ${['fadiga','dor','sono','motivacao'].map((k,i) => {
+          const icons = ['😓','🦵','🛌','🔥'];
+          const labels = ['Fadiga','Dor muscular','Qualidade sono','Motivação'];
+          return `<div class="ci-item">
+            <div class="ci-label"><span class="ci-icon">${icons[i]}</span>${labels[i]}</div>
+            <div class="stars" id="stars-${k}">
+              ${[1,2,3,4,5].map(n=>`<button class="star" data-k="${k}" data-v="${n}" onclick="setStar('${k}',${n})">${n}</button>`).join('')}
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+      <div class="btn-row" style="margin-top:14px">
+        <button class="btn btn-pri btn-w" id="ci-btn" onclick="submitCheckin('${key}','${adjustedType}',${w},${longKm})" disabled>
+          ${S.apiKey && !S.noAI ? '🤖 Fazer Check-in e Gerar Treino' : '📋 Fazer Check-in e Ver Treino'}
+        </button>
+      </div>`;
+    }
+  }
+
+  html += `</div>`; // end main card
+
+  // — Register modal placeholder —
+  html += `<div id="reg-modal" style="display:none"></div>`;
+
+  el.innerHTML = html;
+
+  // Init star state if checkin exists
+  if (log?.checkin) {
+    Object.entries(log.checkin).forEach(([k,v]) => {
+      for (let i=1; i<=v; i++) {
+        const btn = document.querySelector(`[data-k="${k}"][data-v="${i}"]`);
+        if (btn) btn.classList.add('on');
+      }
+    });
+  }
+}
+
+// Star click
+const ciState = {};
+function setStar(key, val) {
+  ciState[key] = val;
+  document.querySelectorAll(`[data-k="${key}"]`).forEach((b,i) => {
+    b.classList.toggle('on', i < val);
+  });
+  // Enable button if all 4 filled
+  const filled = ['fadiga','dor','sono','motivacao'].every(k => ciState[k]);
+  const btn = document.getElementById('ci-btn');
+  if (btn) btn.disabled = !filled;
+}
+
+async function submitCheckin(logKey, type, w, longKm) {
+  const ci = {
+    fadiga:    ciState.fadiga    || 3,
+    dor:       ciState.dor       || 2,
+    sono:      ciState.sono      || 3,
+    motivacao: ciState.motivacao || 3,
+  };
+  putLog(logKey, {checkin: ci});
+
+  // Adjust type based on checkin
+  const adjusted = adjustType(type, ci);
+  await doGenerate(logKey, adjusted, w, longKm);
+}
+
+async function doGenerate(logKey, type, w, longKm) {
+  const logEntry = getLog(logKey);
+  const btn = document.getElementById('gen-btn') || document.getElementById('ci-btn');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Gerando...'; }
+
+  let training = null;
+  try {
+    const aiText = await callAI(type, w, logEntry?.checkin, longKm);
+    training = aiText ? parseAI(aiText) : getFallback(type, w, logEntry?.checkin, longKm);
+  } catch(e) {
+    console.warn('AI failed:', e);
+    training = getFallback(type, w, logEntry?.checkin, longKm);
+  }
+  putLog(logKey, {training, adjustedType: type});
+  renderHoje();
+}
+
+async function regenTraining(logKey) {
+  const log = getLog(logKey);
+  if (!log) return;
+  const w = getWeekNum();
+  const type = log.adjustedType || getType(today().getDay(), w);
+  const longKm = getLongKm(w);
+  putLog(logKey, {training: null});
+  await doGenerate(logKey, type, w, longKm);
+}
+
+function markRestDone(logKey) {
+  putLog(logKey, {done: true, training: getFallback('descanso', getWeekNum(), null, 0)});
+  renderHoje();
+}
+
+function showRegister(logKey) {
+  const el = document.getElementById('reg-modal');
+  const log = getLog(logKey) || {};
+  const m = log.metrics || {};
+  el.style.display = 'block';
+  el.innerHTML = `
+    <div class="card">
+      <div class="card-label">Registrar conclusão</div>
+      <div class="row2">
+        <div class="field"><label>Distância (km)</label><input id="r-km" type="number" step="0.1" value="${m.km||''}" placeholder="0.0"></div>
+        <div class="field"><label>Tempo (min)</label><input id="r-time" type="text" value="${m.time||''}" placeholder="49:33"></div>
+      </div>
+      <div class="row3">
+        <div class="field"><label>FC média (bpm)</label><input id="r-fc" type="number" value="${m.fc||''}" placeholder="149"></div>
+        <div class="field"><label>Pace (min/km)</label><input id="r-pace" type="text" value="${m.pace||''}" placeholder="6:00"></div>
+        <div class="field"><label>PSE (1–10)</label><input id="r-pse" type="number" min="1" max="10" value="${m.pse||''}" placeholder="7"></div>
+      </div>
+      <div class="field"><label>Observações</label><textarea id="r-obs" placeholder="Como foi o treino?">${m.obs||''}</textarea></div>
+      <div class="btn-row">
+        <button class="btn btn-green btn-w" onclick="saveRegister('${logKey}')">💾 Salvar</button>
+        <button class="btn btn-ghost" onclick="document.getElementById('reg-modal').style.display='none'">Cancelar</button>
+      </div>
+    </div>`;
+  el.scrollIntoView({behavior:'smooth'});
+}
+
+function saveRegister(logKey) {
+  const metrics = {
+    km:    parseFloat(document.getElementById('r-km')?.value) || null,
+    time:  document.getElementById('r-time')?.value || null,
+    fc:    parseInt(document.getElementById('r-fc')?.value) || null,
+    pace:  document.getElementById('r-pace')?.value || null,
+    pse:   parseInt(document.getElementById('r-pse')?.value) || null,
+    obs:   document.getElementById('r-obs')?.value || null,
+  };
+  putLog(logKey, {done: true, metrics, completedAt: new Date().toISOString()});
+  renderHoje();
+}
+
+function reopenLog(logKey) {
+  putLog(logKey, {done: false});
+  renderHoje();
+}
+
+// ════════════════════════════════════════
+// RENDER — SEMANA
+// ════════════════════════════════════════
+function renderSemana() {
+  const el  = document.getElementById('view-semana');
+  const now = today();
+  const dow = now.getDay();
+  const w   = getWeekNum();
+  const rec = isRecovery(w);
+  const longKm = getLongKm(w);
+
+  // Get Monday of current week
+  const monday = new Date(now);
+  monday.setDate(now.getDate() - (dow === 0 ? 6 : dow - 1));
+
+  const days = Array.from({length:7}, (_,i) => {
+    const d = new Date(monday);
+    d.setDate(monday.getDate() + i);
+    return d;
+  });
+
+  const wdayHTML = days.map((d,i) => {
+    const actualDow = d.getDay();
+    const k = dkey(d);
+    const log = getLog(k);
+    const type = getType(actualDow, w);
+    const T = TYPES[type];
+    const isToday = dkey(d) === dkey(now);
+    const isPast = d < now && !isToday;
+    const done = log?.done;
+    const missed = isPast && !done;
+    let cls = 'wday';
+    if (isToday) cls += ' is-today';
+    else if (done) cls += ' is-done';
+    else if (missed) cls += ' is-missed';
+    return `<div class="${cls}" onclick="showDayDetail('${k}',${actualDow})">
+      <div class="wday-name">${DAY_SHORT[actualDow]}</div>
+      <div class="wday-icon">${done?'✅':T.icon}</div>
+      <div class="wday-num">${d.getDate().toString().padStart(2,'0')}/${(d.getMonth()+1).toString().padStart(2,'0')}</div>
+    </div>`;
+  }).join('');
+
+  let html = `
+    <div class="section-hd">Semana ${w} de ${Math.ceil(daysUntil(GOAL_21K)/7)}${rec?' · Recuperação':''}</div>
+    <div class="week-grid">${wdayHTML}</div>`;
+
+  // Weekly summary
+  const weekLogs = days.map(d => getLog(dkey(d))).filter(Boolean);
+  const doneCnt = weekLogs.filter(l => l.done).length;
+
+  html += `<div class="card">
+    <div class="card-label">Resumo da semana</div>
+    <div style="display:flex;gap:16px">
+      <div class="metric">
+        <div class="metric-val">${doneCnt}</div>
+        <div class="metric-lbl">treinos feitos</div>
+        <div class="bar-wrap"><div class="bar-fill" style="width:${Math.round(doneCnt/6*100)}%"></div></div>
+      </div>
+      <div class="metric">
+        <div class="metric-val">${longKm}</div>
+        <div class="metric-lbl">km no longo</div>
+      </div>
+    </div>`;
+
+  // This week's training plan
+  html += `<div class="div"></div><div class="card-label">Plano da semana</div>`;
+  days.forEach((d, i) => {
+    if (d.getDay() === 0) return; // skip Sunday header, show at end
+    const actualDow = d.getDay();
+    const type = getType(actualDow, w);
+    const T = TYPES[type];
+    const log = getLog(dkey(d));
+    const isToday2 = dkey(d) === dkey(now);
+    const fb = getFallback(type, w, null, longKm);
+    html += `<div style="display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)">
+      <div style="width:32px;text-align:center;font-size:18px;flex-shrink:0;margin-top:2px">${log?.done?'✅':T.icon}</div>
+      <div style="flex:1">
+        <div style="font-size:12px;color:var(--text3);margin-bottom:1px">${DAY_LONG[actualDow].split('-')[0]} ${d.getDate().toString().padStart(2,'0')}/${(d.getMonth()+1).toString().padStart(2,'0')}${isToday2?' <span style=\'color:var(--primary)\'>← hoje</span>':''}</div>
+        <div style="font-size:13px;font-weight:600">${fb.titulo}</div>
+        <div style="font-size:11px;color:var(--text2);margin-top:2px">${fb.duracao} · ${fb.zonas}</div>
+      </div>
+      <span class="t-badge ${T.cls}" style="flex-shrink:0">${T.icon}</span>
+    </div>`;
+  });
+  // Sunday
+  html += `<div style="display:flex;align-items:center;gap:10px;padding:8px 0">
+    <div style="width:32px;text-align:center;font-size:18px;flex-shrink:0">😴</div>
+    <div><div style="font-size:12px;color:var(--text3)">Domingo — Descanso Total</div></div>
+  </div>`;
+
+  html += `</div>`; // end card
+
+  el.innerHTML = html;
+}
+
+function showDayDetail(key, dow) {
+  // Could expand to show detail — for now navigate to hoje if today
+  if (key === dkey(today())) setView('hoje');
+}
+
+// ════════════════════════════════════════
+// RENDER — PROGRESSO
+// ════════════════════════════════════════
+function renderProgresso() {
+  const el = document.getElementById('view-progresso');
+  const w  = getWeekNum();
+  const totalWeeks21 = Math.ceil(daysUntil(GOAL_21K) / 7) + w;
+  const progressPct21 = Math.min(Math.round((w / totalWeeks21) * 100), 100);
+  const doneCount = Object.values(S.logs).filter(l => l.done).length;
+  const s = streak();
+  const currentLong = getLongKm(w);
+
+  // Chart data: weeks 1 to w+4
+  const chartWeeks = Math.min(w + 4, 36);
+  const bars = Array.from({length: chartWeeks}, (_,i) => {
+    const wn = i+1;
+    const km = getLongKm(wn);
+    const isCurr = wn === w;
+    const isDone = wn < w;
+    const isRec  = isRecovery(wn);
+    return {wn, km, isCurr, isDone, isRec};
+  });
+  const maxKm = Math.max(...bars.map(b => b.km), 1);
+
+  const chartHTML = bars.map(b => {
+    let cls = 'c-bar ';
+    cls += b.isCurr ? 'curr' : b.isDone ? (b.isRec?'rec':'done') : (b.isRec?'rec':'fut');
+    const h = Math.round((b.km / maxKm) * 100);
+    return `<div class="${cls}" style="height:${h}%" title="Sem. ${b.wn}: ${b.km}km${b.isRec?' (rec.)':''}"></div>`;
+  }).join('');
+
+  const labelHTML = bars.map(b => `<span>${b.isCurr?'▼':b.wn%4===0?'↓':''}</span>`).join('');
+
+  // Pace trend (from logs)
+  const paceEntries = Object.entries(S.logs)
+    .filter(([,l]) => l.done && l.metrics?.pace)
+    .slice(-6);
+
+  let html = `
+    <div class="section-hd">Visão Geral</div>
+    <div class="metrics-grid">
+      <div class="metric">
+        <div class="metric-val">${w}</div>
+        <div class="metric-lbl">semana atual</div>
+        <div class="bar-wrap"><div class="bar-fill" style="width:${progressPct21}%"></div></div>
+      </div>
+      <div class="metric">
+        <div class="metric-val">${currentLong}</div>
+        <div class="metric-lbl">km no longo</div>
+        <div class="bar-wrap"><div class="bar-fill green" style="width:${Math.round(currentLong/21*100)}%"></div></div>
+      </div>
+      <div class="metric">
+        <div class="metric-val">${doneCount}</div>
+        <div class="metric-lbl">treinos totais</div>
+      </div>
+      <div class="metric">
+        <div class="metric-val">${s}</div>
+        <div class="metric-lbl">dias seguidos</div>
+      </div>
+    </div>
+
+    <div class="section-hd">Progressão da Corrida Longa</div>
+    <div class="card">
+      <div class="card-label">Distância por semana · Meta: 21 km</div>
+      <div class="chart-wrap">${chartHTML}</div>
+      <div class="chart-labels">${labelHTML}</div>
+      <div style="display:flex;gap:12px;margin-top:10px;font-size:11px;color:var(--text2)">
+        <span><span style="display:inline-block;width:10px;height:10px;background:var(--green);border-radius:2px;margin-right:4px"></span>Concluído</span>
+        <span><span style="display:inline-block;width:10px;height:10px;background:var(--primary);border-radius:2px;margin-right:4px"></span>Atual</span>
+        <span><span style="display:inline-block;width:10px;height:10px;background:var(--blue);opacity:0.6;border-radius:2px;margin-right:4px"></span>Recuperação</span>
+        <span><span style="display:inline-block;width:10px;height:10px;background:var(--bg3);border-radius:2px;margin-right:4px"></span>Futuro</span>
+      </div>
+    </div>
+
+    <div class="section-hd">Metas</div>
+    <div class="card">
+      <div style="margin-bottom:12px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline">
+          <div style="font-weight:600">🏃 21 km — 27/12/2026</div>
+          <div style="font-size:12px;color:var(--text2)">${daysUntil(GOAL_21K)} dias</div>
+        </div>
+        <div class="bar-wrap" style="margin-top:6px">
+          <div class="bar-fill" style="width:${progressPct21}%"></div>
+        </div>
+        <div style="font-size:11px;color:var(--text3);margin-top:3px">Semana ${w} de ~${totalWeeks21} · ${currentLong}km de 21km</div>
+      </div>
+      <div class="div"></div>
+      <div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline">
+          <div style="font-weight:600">🏆 42 km — 27/12/2027</div>
+          <div style="font-size:12px;color:var(--text2)">${daysUntil(GOAL_42K)} dias</div>
+        </div>
+        <div class="bar-wrap" style="margin-top:6px">
+          <div class="bar-fill" style="width:${Math.round(progressPct21*0.3)}%"></div>
+        </div>
+        <div style="font-size:11px;color:var(--text3);margin-top:3px">Fase 2 começa após a meia maratona</div>
+      </div>
+    </div>
+
+    <div class="section-hd">Zonas de FC</div>
+    <div class="card">
+      <div class="card-label">Referência</div>
+      ${[
+        ['Z1','Aquecimento','86–102 bpm','z1'],
+        ['Z2','Fácil / Base aeróbica','103–119 bpm','z2'],
+        ['Z3','Aeróbico constante','120–136 bpm','z3'],
+        ['Z4','Limiar — ritmo forte','137–153 bpm','z4'],
+        ['Z5','Máximo','> 153 bpm','z5'],
+      ].map(([z,desc,fc,cls]) => `<div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border)">
+        <span class="z-chip ${cls}">${z}</span>
+        <div style="flex:1"><div style="font-size:13px">${desc}</div><div style="font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace">${fc}</div></div>
+      </div>`).join('')}
+    </div>`;
+
+  el.innerHTML = html;
+}
+
+// ════════════════════════════════════════
+// RENDER — HISTÓRICO
+// ════════════════════════════════════════
+function renderHistorico() {
+  const el = document.getElementById('view-historico');
+  const entries = Object.entries(S.logs)
+    .filter(([,l]) => l.done || l.checkin)
+    .sort(([a],[b]) => b.localeCompare(a))
+    .slice(0, 30);
+
+  let html = `<div class="section-hd">Histórico de Treinos</div>`;
+
+  if (!entries.length) {
+    html += `<div class="card" style="text-align:center;padding:30px">
+      <div style="font-size:32px;margin-bottom:8px">📋</div>
+      <div style="color:var(--text2)">Nenhum treino registrado ainda.</div>
+    </div>`;
+    el.innerHTML = html;
+    return;
+  }
+
+  html += `<div class="card">`;
+  entries.forEach(([k, log]) => {
+    const d = new Date(k + 'T12:00:00');
+    const dow = d.getDay();
+    const w = Math.max(1, Math.floor((d - PLAN_START) / (7*86400000)) + 1);
+    const type = log.adjustedType || getType(dow, w);
+    const T = TYPES[type] || TYPES.descanso;
+    const m = log.metrics || {};
+    html += `<div class="hist-item">
+      <div class="hist-dot ${log.done?'':'skip'}"></div>
+      <div style="flex:1">
+        <div class="hist-date">${d.toLocaleDateString('pt-BR',{weekday:'short',day:'2-digit',month:'2-digit'})} · Semana ${w}</div>
+        <div class="hist-name">${T.icon} ${log.training?.titulo || T.label}</div>
+        ${m.km||m.time||m.fc ? `<div class="hist-metrics">
+          ${m.km?`<span><span>dist</span> ${m.km}km</span>`:''}
+          ${m.time?`<span><span>tempo</span> ${m.time}</span>`:''}
+          ${m.fc?`<span><span>FC</span> ${m.fc}bpm</span>`:''}
+          ${m.pace?`<span><span>pace</span> ${m.pace}</span>`:''}
+          ${m.pse?`<span><span>PSE</span> ${m.pse}/10</span>`:''}
+        </div>` : ''}
+        ${m.obs ? `<div style="font-size:11px;color:var(--text3);margin-top:3px;font-style:italic">"${m.obs}"</div>` : ''}
+      </div>
+    </div>`;
+  });
+  html += `</div>`;
+
+  el.innerHTML = html;
+}
+
+// ════════════════════════════════════════
+// RENDER — CONFIG
+// ════════════════════════════════════════
+function renderConfig() {
+  const el = document.getElementById('view-config');
+  el.innerHTML = `
+    <div class="section-hd">Configurações</div>
+    <div class="card">
+      <div class="card-label">API Anthropic (IA)</div>
+      <div class="field">
+        <label>Chave API</label>
+        <input type="password" id="cfg-key" value="${S.apiKey}" placeholder="sk-ant-...">
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+        <span style="font-size:13px;color:var(--text2)">Usar sem IA (modo offline)</span>
+        <label style="cursor:pointer">
+          <input type="checkbox" id="cfg-noai" ${S.noAI?'checked':''} onchange="S.noAI=this.checked;localStorage.setItem('sigt_noai',S.noAI?'1':'0')">
+        </label>
+      </div>
+      <button class="btn btn-pri btn-w" onclick="saveConfig()">Salvar configurações</button>
+    </div>
+    <div class="card">
+      <div class="card-label">Plano</div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.7">
+        <div>Início do plano: <strong>04/05/2026</strong></div>
+        <div>Objetivo 1: <strong>21 km</strong> em <strong>27/12/2026</strong></div>
+        <div>Objetivo 2: <strong>42 km</strong> em <strong>27/12/2027</strong></div>
+        <div>Semana atual: <strong>${getWeekNum()}</strong></div>
+        <div>Corrida longa: <strong>${getLongKm(getWeekNum())} km</strong></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-label">Dados</div>
+      <div style="font-size:13px;color:var(--text2);margin-bottom:12px">${Object.keys(S.logs).length} registros no localStorage</div>
+      <button class="btn btn-ghost" onclick="exportData()">⬇️ Exportar dados (JSON)</button>
+      <button class="btn btn-ghost" style="margin-top:8px;color:var(--red)" onclick="clearData()">🗑️ Apagar todos os dados</button>
+    </div>
+    <div class="card">
+      <div class="card-label">Regras do sistema</div>
+      <div style="font-size:12px;color:var(--text2);line-height:1.8">
+        • Máx. 2 treinos intensos/semana<br>
+        • Prioridade: treinos Z2 para base aeróbica<br>
+        • Progressão da corrida longa: +1–2 km/semana<br>
+        • Semana 4, 8, 12... = semana de recuperação<br>
+        • Tabata = treino intenso da semana<br>
+        • Fadiga ≥ 4 → treino automaticamente reduzido<br>
+        • Domingo = descanso total (obrigatório)
+      </div>
+    </div>`;
+}
+
+function saveConfig() {
+  S.apiKey = document.getElementById('cfg-key')?.value || '';
+  localStorage.setItem('sigt_key', S.apiKey);
+  alert('Configurações salvas!');
+}
+
+function exportData() {
+  const blob = new Blob([JSON.stringify({logs: S.logs, exportedAt: new Date().toISOString()}, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `sig-treinos-${dkey(today())}.json`;
+  a.click();
+}
+
+function clearData() {
+  if (confirm('Apagar TODOS os dados de treino? Esta ação é irreversível.')) {
+    S.logs = {};
+    saveLogs();
+    renderHoje();
+    alert('Dados apagados.');
+  }
+}
+
+// ════════════════════════════════════════
+// NAVIGATION
+// ════════════════════════════════════════
+function setView(v) {
+  S.view = v;
+  document.querySelectorAll('.view').forEach(el => el.classList.toggle('on', el.id === 'view-'+v));
+  document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.toggle('on', btn.id === 'tab-'+v));
+  const renders = {hoje:renderHoje, semana:renderSemana, progresso:renderProgresso, historico:renderHistorico, config:renderConfig};
+  if (renders[v]) renders[v]();
+}
+
+// ════════════════════════════════════════
+// THEME
+// ════════════════════════════════════════
+function toggleTheme() {
+  S.theme = S.theme === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', S.theme);
+  localStorage.setItem('sigt_theme', S.theme);
+}
+
+// ════════════════════════════════════════
+// SETUP
+// ════════════════════════════════════════
+function saveKey() {
+  S.apiKey = document.getElementById('key-input')?.value || '';
+  localStorage.setItem('sigt_key', S.apiKey);
+  localStorage.setItem('sigt_setup', '1');
+  document.getElementById('setup').style.display = 'none';
+  renderHoje();
+}
+
+function skipSetup() {
+  S.noAI = true;
+  localStorage.setItem('sigt_noai', '1');
+  localStorage.setItem('sigt_setup', '1');
+  document.getElementById('setup').style.display = 'none';
+  renderHoje();
+}
+
+// ════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════
+function init() {
+  // Apply theme
+  document.documentElement.setAttribute('data-theme', S.theme);
+
+  // Update phase chip
+  const w = getWeekNum();
+  const phase = today() <= GOAL_21K ? 1 : 2;
+  const chip = document.getElementById('hdr-phase');
+  if (phase === 2) { chip.textContent = 'Fase 2 · 42km'; chip.className = 'phase-chip p2'; }
+
+  // First time setup
+  if (!localStorage.getItem('sigt_setup') && !S.apiKey) {
+    document.getElementById('setup').style.display = 'flex';
+    return;
+  }
+
+  renderHoje();
+}
+
+init();
+</script>
+</body>
+</html>
